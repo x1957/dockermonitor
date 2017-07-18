@@ -1,10 +1,11 @@
 package falcon
 
-
 type Falcon struct {
-	url string
-
+	URL     string   `json:"url"`
+	Metrics string   `json:"metrics"`
+	Tests   []string `json:"tesing,omitempty"`
 }
+
 func Run() {
 
 }
