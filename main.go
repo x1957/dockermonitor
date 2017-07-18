@@ -2,20 +2,17 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 )
 
-const (
-	Nanosecond  time.Duration = 1
-	Microsecond               = 1000 * Nanosecond
-	Millisecond               = 1000 * Microsecond
-	Second                    = 1000 * Millisecond
-	Minute                    = 60 * Second
-	Hour                      = 60 * Minute
+var (
+	period = flag.Duration("period", 2*time.Second, "")
 )
 
 func main() {
@@ -25,10 +22,11 @@ func main() {
 	}
 
 	go func() {
-		for _ = range time.Tick(2 * Second) {
+		for _ = range time.Tick(*period) {
 			containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
 			if err != nil {
-				panic(err)
+				log.Print(err)
+				continue
 			}
 
 			for _, container := range containers {
