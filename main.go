@@ -12,7 +12,8 @@ import (
 )
 
 var (
-	period = flag.Duration("period", 2*time.Second, "")
+	period  = flag.Duration("period", 2*time.Second, "")
+	timeout = flag.Duration("timeout", 1*time.Second, "")
 )
 
 func main() {
@@ -21,19 +22,28 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	ctx := context.Background()
 	go func() {
 		for _ = range time.Tick(*period) {
-			containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
-			if err != nil {
-				log.Print(err)
-				continue
-			}
-
-			for _, container := range containers {
-				fmt.Printf("%s %s\n", container.ID[:10], container.Image)
+			if err := ping(ctx, cli); err != nil {
+				log.Printf("Fail: %v", err)
+			} else {
+				log.Print("OK")
 			}
 		}
 	}()
 	select {}
+}
+
+func ping(ctx context.Context, cli *client.Client) error {
+	ctx, cancel := context.WithTimeout(ctx, *timeout)
+	defer cancel()
+	containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
+	if err != nil {
+		return err
+	}
+	for _, container := range containers {
+		fmt.Printf("%s %s\n", container.ID[:10], container.Image)
+	}
+	return nil
 }
