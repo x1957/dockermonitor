@@ -14,7 +14,7 @@ import (
 
 var (
 	period  = *flag.Duration("period", 2 * time.Second, "")
-	timeout = *flag.Duration("timeout", 1 * time.Second, "")
+	timeout = *flag.Duration("timeout", 1 * time.Minute, "")
 )
 
 func record(name string, value int64, agents []agent.Agent) {
@@ -46,6 +46,7 @@ func main() {
 	promeAgent := prome.NewPrometheus()
 	promeAgent.Run()
 	agents = append(agents, promeAgent)
+	log.Printf("start.... \nperiod = %v, timeout = %v", period, timeout)
 	// add agents
 	go func() {
 		for _ = range time.Tick(period) {
@@ -55,6 +56,7 @@ func main() {
 				errs ++
 				// record error
 				record("docker_error_cnt", int64(errs), agents)
+				log.Printf("error: %v", err)
 				continue
 			}
 			ps = time.Since(start)
@@ -69,6 +71,7 @@ func main() {
 				errs ++
 				// record error
 				record("docker_error_cnt", int64(errs), agents)
+				log.Printf("error: %v", err)
 				continue
 			}
 			// record info latency
