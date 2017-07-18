@@ -16,6 +16,7 @@ var (
 )
 
 func main() {
+	flag.Parse()
 	cli, err := client.NewEnvClient()
 	if err != nil {
 		panic(err)
