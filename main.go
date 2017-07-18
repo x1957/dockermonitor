@@ -36,7 +36,6 @@ func main() {
 		panic(err)
 	}
 
-	ctx, _ := context.WithTimeout(context.Background(), timeout)
 	var start time.Time
 	var ps = time.Duration(0)
 	info := time.Duration(0)
@@ -50,6 +49,7 @@ func main() {
 	// add agents
 	go func() {
 		for _ = range time.Tick(period) {
+			ctx, _ := context.WithTimeout(context.Background(), timeout)
 			start = time.Now()
 			containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
 			if err != nil {
