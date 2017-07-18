@@ -15,12 +15,12 @@ type Prome struct {
 }
 
 func NewPrometheus() agent.Agent {
-	return Prome{
+	return &Prome{
 		counters: make(map[string]prometheus.Gauge),
 	}
 }
 
-func (p Prome) RecordGauge(name string, gaugeValue int64) {
+func (p *Prome) RecordGauge(name string, gaugeValue int64) {
 	gauge, ok := p.counters[name]
 	if !ok {
 		// registe the counter
@@ -34,7 +34,7 @@ func (p Prome) RecordGauge(name string, gaugeValue int64) {
 	gauge.Set(float64(gaugeValue))
 }
 
-func (p Prome) RecordDuration(name string, duration time.Duration) {
+func (p *Prome) RecordDuration(name string, duration time.Duration) {
 	gauge, ok := p.counters[name]
 	if !ok {
 		// registe the counter
@@ -48,7 +48,7 @@ func (p Prome) RecordDuration(name string, duration time.Duration) {
 	gauge.Set(float64(duration))
 }
 
-func (p Prome) Run() {
+func (p *Prome) Run() {
 	go func() {
 		http.Handle("/metrics", promhttp.Handler())
 		log.Fatal(http.ListenAndServe(":1957", nil))

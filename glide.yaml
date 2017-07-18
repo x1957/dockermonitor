@@ -1,0 +1,12 @@
+package: github.com/x1957/dockermonitor
+import:
+- package: github.com/docker/docker
+  version: ^17.5.0-ce-rc3
+  subpackages:
+  - api/types
+  - client
+- package: github.com/prometheus/client_golang
+  version: ^0.8.0
+  subpackages:
+  - prometheus
+  - prometheus/promhttp
