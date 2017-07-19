@@ -10,6 +10,7 @@ import (
 	"github.com/docker/docker/client"
 	"github.com/x1957/dockermonitor/prome"
 	"github.com/x1957/dockermonitor/agent"
+	"github.com/x1957/dockermonitor/falcon"
 )
 
 var (
@@ -44,7 +45,9 @@ func main() {
 	var agents []agent.Agent
 	promeAgent := prome.NewPrometheus()
 	promeAgent.Run()
-	agents = append(agents, promeAgent)
+	falconAgent := falcon.NewFalcon()
+	falconAgent.Run()
+	agents = append(agents, promeAgent, falconAgent)
 	log.Printf("start.... \nperiod = %v, timeout = %v", period, timeout)
 	// add agents
 	go func() {
