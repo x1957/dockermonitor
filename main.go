@@ -26,7 +26,7 @@ func record(name string, value int64, agents []agent.Agent) {
 
 func recordDuration(name string, value time.Duration, agents []agent.Agent) {
 	for _, ag := range agents {
-		ag.RecordDuration(name, value)
+		ag.RecordDuration(name, value/1000000)
 	}
 }
 
