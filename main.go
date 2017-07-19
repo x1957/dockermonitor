@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	period  = *flag.Duration("period", 2 * time.Second, "")
+	period  = *flag.Duration("period", 2 * time.Minute, "")
 	timeout = *flag.Duration("timeout", 1 * time.Minute, "")
 )
 

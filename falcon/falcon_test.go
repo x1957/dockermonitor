@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"log"
 	"testing"
+	"net/http"
+	"io/ioutil"
+	"fmt"
 )
 
 func Test_ToJson(t *testing.T) {
@@ -35,4 +38,16 @@ func Test_ToJson(t *testing.T) {
 	if (string(bs) != `[{"metric":"docker-test","endpoint":"1957","timestamp":12345,"step":0,"value":1957,"counterType":"GAUGE","tags":"kubernetes"}]`) {
 		t.Fail()
 	}
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	log.Printf("%s", string(body))
+	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+}
+
+func Test_HTTPServer(t *testing.T) {
+	http.HandleFunc("/v1/push", handler)
+	http.ListenAndServe(":1988", nil)
 }
