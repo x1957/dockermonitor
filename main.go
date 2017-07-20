@@ -58,31 +58,31 @@ func main() {
 			if err != nil {
 				errs ++
 				// record error
-				record("docker-error-cnt", int64(errs), agents)
+				record("docker_error_cnt", int64(errs), agents)
 				log.Printf("error: %v", err)
 				continue
 			}
 			ps = time.Since(start)
 			// record ps latency
-			recordDuration("docker-ps-latency", ps, agents)
+			recordDuration("docker_ps_latency", ps, agents)
 			start = time.Now()
 			// record container size
 			containerSize = len(containers)
-			record("docker-containter-size", int64(containerSize), agents)
+			record("docker_containter_size", int64(containerSize), agents)
 			_, err = cli.Info(ctx)
 			if err != nil {
 				errs ++
 				// record error
-				record("docker-error-cnt", int64(errs), agents)
+				record("docker_error_cnt", int64(errs), agents)
 				log.Printf("error: %v", err)
 				continue
 			}
 			// record info latency
 			info = time.Since(start)
-			recordDuration("docker-info-lantency", info, agents)
+			recordDuration("docker_info_lantency", info, agents)
 			// reset erros
 			errs = 0
-			record("docker-error-cnt", int64(errs), agents)
+			record("docker_error_cnt", int64(errs), agents)
 			log.Printf("OK")
 		}
 	}()
