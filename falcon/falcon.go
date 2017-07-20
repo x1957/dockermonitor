@@ -94,7 +94,7 @@ func (f *Falcon) buildJson(name string, data int64) (string, error) {
 }
 
 func (f *Falcon) push(data string) {
-	resp, err := f.Client.Post(f.URL, "application/json", strings.NewReader(data))
+	resp, err := f.Client.Post(f.URL, "", strings.NewReader(data))
 	if err != nil {
 		log.Printf("Push error: %v", err)
 		return
