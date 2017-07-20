@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"log"
 	"github.com/x1957/dockermonitor/agent"
+	"strings"
 )
 
 type Prome struct {
@@ -21,6 +22,7 @@ func NewPrometheus() agent.Agent {
 }
 
 func (p *Prome) RecordGauge(name string, gaugeValue int64) {
+	name = strings.Replace(name,".", "-", -1)
 	gauge, ok := p.counters[name]
 	if !ok {
 		// registe the counter
@@ -35,6 +37,7 @@ func (p *Prome) RecordGauge(name string, gaugeValue int64) {
 }
 
 func (p *Prome) RecordDuration(name string, duration time.Duration) {
+	name = strings.Replace(name,".", "-", -1)
 	gauge, ok := p.counters[name]
 	if !ok {
 		// registe the counter
