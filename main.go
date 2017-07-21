@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"log"
+	_ "net/http/pprof"
 	"time"
 
 	"github.com/docker/docker/api/types"
