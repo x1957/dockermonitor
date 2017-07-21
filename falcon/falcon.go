@@ -24,7 +24,7 @@ type Metrics struct {
 	Step int32 `json:"step"`
 	Value int64 `json:"value"`
 	CounterType string `json:"counterType"`
-	Tags string `json:"tags"`
+	Tags string `json:"tags,omitempty"`
 }
 
 const AGENT_URL string = "http://127.0.0.1:1988/v1/push"
@@ -80,8 +80,6 @@ func (f *Falcon) buildJson(name string, data int64) (string, error) {
 		Step: f.Step,
 		Value: data,
 		CounterType: "GAUGE",
-		Tags: "kubernetes",
-
 	}
 	var mlist []Metrics = make([]Metrics, 1)
 	mlist[0] = metrics
