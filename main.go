@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	period  = *flag.Duration("period", 2*time.Minute, "")
-	timeout = *flag.Duration("timeout", 1*time.Minute, "")
+	period  = flag.Duration("period", 2*time.Minute, "")
+	timeout = flag.Duration("timeout", 1*time.Minute, "")
 )
 
 func record(name string, value int64, agents []agent.Agent) {
@@ -49,11 +49,11 @@ func main() {
 	falconAgent := falcon.NewFalcon()
 	falconAgent.Run()
 	agents = append(agents, promeAgent, falconAgent)
-	log.Printf("start.... \nperiod = %v, timeout = %v", period, timeout)
+	log.Printf("start.... \nperiod = %v, timeout = %v", *period, *timeout)
 	// add agents
 	go func() {
-		for _ = range time.Tick(period) {
-			ctx, _ := context.WithTimeout(context.Background(), timeout)
+		for _ = range time.Tick(*period) {
+			ctx, _ := context.WithTimeout(context.Background(), *timeout)
 			start = time.Now()
 			containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
 			if err != nil {
