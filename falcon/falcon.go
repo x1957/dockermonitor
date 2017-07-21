@@ -1,30 +1,31 @@
 package falcon
 
 import (
-	"github.com/x1957/dockermonitor/agent"
-	"time"
-	"os"
 	"encoding/json"
-	"net/http"
-	"strings"
-	"log"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/x1957/dockermonitor/agent"
 )
 
 type Falcon struct {
-	URL string
-	Step int32
+	URL    string
+	Step   int32
 	Client *http.Client
 }
 
 type Metrics struct {
-	Metric     string   `json:"metric"`
-	Endpoint string   `json:"endpoint"`
-	Timestamp   int64 `json:"timestamp"`
-	Step int32 `json:"step"`
-	Value int64 `json:"value"`
+	Metric      string `json:"metric"`
+	Endpoint    string `json:"endpoint"`
+	Timestamp   int64  `json:"timestamp"`
+	Step        int32  `json:"step"`
+	Value       int64  `json:"value"`
 	CounterType string `json:"counterType"`
-	Tags string `json:"tags,omitempty"`
+	Tags        string `json:"tags,omitempty"`
 }
 
 const AGENT_URL string = "http://127.0.0.1:1988/v1/push"
@@ -37,11 +38,11 @@ func NewFalcon() agent.Agent {
 	}
 	client := &http.Client{
 		Transport: tr,
-		Timeout: 1 * time.Minute,
+		Timeout:   1 * time.Minute,
 	}
 	return &Falcon{
-		URL: AGENT_URL,
-		Step: 120,
+		URL:    AGENT_URL,
+		Step:   120,
 		Client: client,
 	}
 }
@@ -74,16 +75,16 @@ func (f *Falcon) buildJson(name string, data int64) (string, error) {
 		return "", err
 	}
 	metrics := Metrics{
-		Metric: name,
-		Endpoint: hostName,
-		Timestamp: time.Now().Unix(),
-		Step: f.Step,
-		Value: data,
+		Metric:      name,
+		Endpoint:    hostName,
+		Timestamp:   time.Now().Unix(),
+		Step:        f.Step,
+		Value:       data,
 		CounterType: "GAUGE",
 	}
 	var mlist []Metrics = make([]Metrics, 1)
 	mlist[0] = metrics
-	bs, err1 :=  json.Marshal(mlist)
+	bs, err1 := json.Marshal(mlist)
 	if err1 != nil {
 		return "", err
 	}

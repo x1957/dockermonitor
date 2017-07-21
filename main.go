@@ -8,14 +8,14 @@ import (
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/x1957/dockermonitor/prome"
 	"github.com/x1957/dockermonitor/agent"
 	"github.com/x1957/dockermonitor/falcon"
+	"github.com/x1957/dockermonitor/prome"
 )
 
 var (
-	period  = *flag.Duration("period", 2 * time.Minute, "")
-	timeout = *flag.Duration("timeout", 1 * time.Minute, "")
+	period  = *flag.Duration("period", 2*time.Minute, "")
+	timeout = *flag.Duration("timeout", 1*time.Minute, "")
 )
 
 func record(name string, value int64, agents []agent.Agent) {
@@ -56,7 +56,7 @@ func main() {
 			start = time.Now()
 			containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
 			if err != nil {
-				errs ++
+				errs++
 				// record error
 				record("docker_error_cnt", int64(errs), agents)
 				log.Printf("error: %v", err)
@@ -71,7 +71,7 @@ func main() {
 			record("docker_containter_size", int64(containerSize), agents)
 			_, err = cli.Info(ctx)
 			if err != nil {
-				errs ++
+				errs++
 				// record error
 				record("docker_error_cnt", int64(errs), agents)
 				log.Printf("error: %v", err)
@@ -88,4 +88,3 @@ func main() {
 	}()
 	select {}
 }
-

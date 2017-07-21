@@ -1,11 +1,12 @@
 package prome
 
 import (
-	"github.com/prometheus/client_golang/prometheus"
-	"time"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"net/http"
 	"log"
+	"net/http"
+	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/x1957/dockermonitor/agent"
 )
 
